@@ -1,0 +1,294 @@
+package main;
+import objects.OBJ_Carrot;
+import objects.OBJ_Pumpkin;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.DecimalFormat;
+
+import static java.lang.Math.round;
+
+public class UI {
+
+    // This class will handle all the UI like text, item icons etc.
+    GamePanel gp;
+    Graphics2D g2;
+    Font arial_40, arial_80B, maruMonica, bellmore;
+    BufferedImage pumpkinImage;
+
+    BufferedImage carrotImage;
+    public boolean messageOn = false;
+    public String message = "";
+    int messageCounter = 0;
+    public boolean gameFinished = false;
+    public String currentDialogue = "";
+    public int commandNum = 0;
+    double playTime;
+
+    // Final score
+    public static int pumpkinsFinal = 0;
+    public static double finalScore = 0;
+    DecimalFormat dFormat = new DecimalFormat("#0.00");
+
+    double pumpkinMultiplier = 1 + (pumpkinsFinal - 1) * 0.05; // More pumpkins = higher score
+    double timeMultiplier = Math.max(1.0, (1 - (playTime / 60)) * 2); // Faster time = higher score
+    // Final score
+    public void updatePumpkins(int pumpkins) {
+        pumpkinsFinal = pumpkins; // Store the current key count in a global variable
+    }
+
+    public void updateFinalScore() {
+        finalScore = (playTime * pumpkinsFinal) * pumpkinMultiplier * timeMultiplier;
+    }
+
+    public UI(GamePanel gp) {
+
+        this.gp = gp;
+
+        arial_40 = new Font("Arial", Font.PLAIN, 40);
+        arial_80B = new Font("Arial", Font.BOLD, 80);
+        OBJ_Pumpkin pumpkin = new OBJ_Pumpkin(gp);
+        pumpkinImage = pumpkin.getImage();
+        OBJ_Carrot carrot = new OBJ_Carrot(gp);
+        carrotImage = carrot.getImage();
+
+        try {
+            // Unsupported sfnt means the font is not a TrueType (ttf) font. Even if the file name says ttf it may not be correct.
+            InputStream is = getClass().getResourceAsStream("/font/x12y16pxMaruMonica.ttf");
+            assert is != null;
+            maruMonica = Font.createFont(Font.TRUETYPE_FONT, is);
+            is = getClass().getResourceAsStream("/font/BellmoreFree-1GB2M.ttf"); // Some characters don't work properly.
+            bellmore = Font.createFont(Font.TRUETYPE_FONT, is);
+        } catch (FontFormatException | IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void showMessage(String text) {
+
+        message = text;
+        messageOn = true;
+    }
+
+    public void draw(Graphics2D g2) {
+
+        this.g2 = g2;
+
+        g2.setFont(maruMonica);
+        g2.setColor(Color.white);
+
+        // Title state
+        if(gp.gameState == gp.titleState) {
+            drawTitleScreen();
+        }
+
+        // Play state
+        if(gp.gameState == gp.playState) {
+            // g2.setFont(new Font("Arial", Font.PLAIN, 40)); // This works but since it will render this 60 times per second this is more efficient.
+            g2.setFont(arial_40);
+            g2.setColor(Color.white);
+            g2.drawImage(pumpkinImage, gp.tileSize / 2, gp.tileSize / 2, gp.tileSize, gp.tileSize, null);
+            g2.drawString("  x  " + gp.player.getHasPumpkin(), 95, 70);
+        }
+        // Pause state
+        if(gp.gameState == gp.pauseState) {
+            drawPauseScreen();
+            gp.stopMusic();
+            // Music doesn't play when playing again, fix this later.
+        }
+        // Dialogue state
+        if (gp.gameState == gp.dialogueState) {
+            drawDialogueScreen();
+        }
+
+        if (gameFinished) {
+
+            gp.gameState = gp.endState;
+            drawEndScreen();
+            gp.stopMusic();
+            gp.gameThread = null;
+
+        } else {
+
+            // Time
+            playTime +=(double)1/60;
+
+        }
+    }
+
+    public void drawEndScreen() {
+
+        // Background color
+        g2.setColor(new Color(245, 123, 36, 255));
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+
+
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 120F));
+        String titleName = "Congratulations!";
+        int x = getXForCenteredText(titleName);
+        int y = gp.tileSize * 3;
+
+        g2.setColor(new Color (20, 66, 11, 255));
+        g2.drawString(titleName, x + 8, y + 8);
+
+        g2.setColor(new Color (34, 121, 17, 255));
+        g2.drawString(titleName, x, y);
+
+        x = gp.screenWidth / 2 - (gp.tileSize*2)/2;
+        y = gp.tileSize * 5;
+        g2.drawImage(gp.player.still1, x, y, gp.tileSize * 2, gp.tileSize * 2, null);
+
+        // Menu
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 50F));
+        String start = "Play again";
+        x = getXForCenteredText(start);
+        y += gp.tileSize * 4;
+        g2.drawString(start, x, y);
+        if(commandNum == 0) {
+            g2.drawImage(carrotImage, (int) (x - gp.tileSize*1.2), (int) (y - gp.tileSize*0.8), 64, 64, null);
+        }
+
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 50F));
+        String quit = "Quit Game";
+        x = getXForCenteredText(quit);
+        y += gp.tileSize * 1.1;
+        g2.drawString(quit, x, y);
+        if(commandNum == 1) {
+            g2.drawImage(carrotImage, (int) (x - gp.tileSize*1.2), (int) (y - gp.tileSize*0.8), 64, 64, null);
+        }
+
+        updateFinalScore();
+
+        g2.setFont(arial_40);
+        g2.setColor(Color.white);
+
+        String text;
+        int textLength;
+        int i;
+        int z;
+
+        text = "Your managed to reach the finish line in : " + dFormat.format(playTime) + " seconds!";
+        textLength = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
+        i = gp.screenWidth/2 - textLength/2;
+        z = gp.screenHeight/2 + gp.tileSize*4;
+        g2.drawString(text, i, z);
+
+        int finalScoreInt = (int)finalScore;
+        text = "Your final score is: " + finalScoreInt;
+        textLength = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
+        i = gp.screenWidth/2 - textLength/2;
+        z = gp.screenHeight/2 + gp.tileSize*5;
+        g2.drawString(text, i, z);
+
+        text = "You managed to collect a total of " + pumpkinsFinal + " pumpkins, good job.";
+        textLength = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
+        i = gp.screenWidth/2 - textLength/2;
+        z = gp.screenHeight/2 + gp.tileSize*6;
+        g2.drawString(text, i, z);
+    }
+
+    public void drawTitleScreen() {
+
+        // Background color
+        g2.setColor(new Color(245, 123, 36, 255));
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+
+        // Title name
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 120F));
+        String titleName = "The Fast and the Fluffy";
+        int x = getXForCenteredText(titleName);
+        int y = gp.tileSize * 3;
+
+        // Shadow for title text
+        g2.setColor(new Color (20, 66, 11, 255));
+        g2.drawString(titleName, x + 8, y + 8);
+
+        // Title Color
+        g2.setColor(new Color (34, 121, 17, 255));
+        g2.drawString(titleName, x, y);
+
+        // Display character image
+        x = gp.screenWidth / 2 - (gp.tileSize*2)/2; // * 2 since the character is double it's size, and divide by to make sure it's in the middle and the left side doesn't start in the middle.
+        y = gp.tileSize * 5;
+        g2.drawImage(gp.player.still1, x, y, gp.tileSize * 2, gp.tileSize * 2, null);
+
+        // Menu
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 50F));
+        String start = "New Game";
+        x = getXForCenteredText(start);
+        y += gp.tileSize * 4;
+        g2.drawString(start, x, y);
+        if(commandNum == 0) {
+            g2.drawImage(carrotImage, (int) (x - gp.tileSize*1.2), (int) (y - gp.tileSize*0.8), 64, 64, null);
+        }
+
+        /*
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 50F));
+        String load = "Lead Board";
+        x = getXForCenteredText(load);
+        y += gp.tileSize * 1.1;
+        g2.drawString(load, x, y);
+        if(commandNum == 1) {
+            g2.drawString(">", x - gp.tileSize, y); // Character instead of image
+        }
+        */
+
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 50F));
+        String quit = "Quit Game";
+        x = getXForCenteredText(quit);
+        y += gp.tileSize * 1.1;
+        g2.drawString(quit, x, y);
+        if(commandNum == 1) {
+            g2.drawImage(carrotImage, (int) (x - gp.tileSize*1.2), (int) (y - gp.tileSize*0.8), 64, 64, null);
+        }
+    }
+    public void drawPauseScreen() {
+
+        g2.setColor(new Color(245, 123, 36, 255));
+        String text = "Game Paused";
+        int x = getXForCenteredText(text); // Made a method for this since I will most likely be using it again in the future.
+        int y = gp.screenHeight/2;
+
+        g2.drawString(text, x, y);
+    }
+
+    public void drawDialogueScreen() {
+
+        // Dialogue window
+        int x = gp.tileSize * 2;
+        int y = gp.tileSize / 2;
+        int width = gp.screenWidth - (gp.tileSize * 4);
+        int height = gp.tileSize * 5;
+
+        drawSubWindow(x, y, width, height);
+
+        // Give x & y new values and draw the text inside the window we made.
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 42F));
+        x += gp.tileSize;
+        y += gp.tileSize;
+
+        for (String line : currentDialogue.split("\n")) { // Can break the line on any symbol, but used \n since it's what you normally use.
+            g2.drawString(line, x, y);
+            y += 40;
+        }
+    }
+
+    public void drawSubWindow(int x, int y, int width, int height) {
+
+        Color c = new Color(0, 0, 0, 200);
+        g2.setColor(c);
+        g2.fillRoundRect(x, y, width, height, 30, 30); // Rounds the edges of the rectangle.
+
+        c = new Color(255, 255, 255);
+        g2.setColor(c);
+        g2.setStroke(new BasicStroke(5)); // This defines the width of the outlines of graphics rendered with Graphics2D.
+        g2.drawRoundRect(x + 5, y + 5, width - 10, height - 10, 25, 25); // Since this rectangle is smaller the arc W/H has to be a bit smaller, otherwise the corners look weird.
+    }
+
+    public int getXForCenteredText(String text) {
+
+        int length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
+        return gp.screenWidth/2 - length/2;
+    }
+}
