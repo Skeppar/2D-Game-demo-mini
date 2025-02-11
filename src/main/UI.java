@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
 
+import static java.lang.Math.log;
 import static java.lang.Math.round;
 
 public class UI {
@@ -31,18 +32,9 @@ public class UI {
     public static double finalScore = 0;
     DecimalFormat dFormat = new DecimalFormat("#0.00");
 
-    double pumpkinMultiplier = 1 + (pumpkinsFinal - 1) * 0.05; // More pumpkins = higher score
-    double timeMultiplier = Math.max(1.0, (1 - (playTime / 60)) * 2); // Faster time = higher score
     // Final score
     public void updatePumpkins(int pumpkins) {
         pumpkinsFinal = pumpkins; // Store the current key count in a global variable
-    }
-
-    public void updateFinalScore() {
-        gameFinished = true;
-        gp.gameState = gp.endState;
-        gp.stopMusic();
-        finalScore = (playTime * pumpkinsFinal) * pumpkinMultiplier * timeMultiplier;
     }
 
     public UI(GamePanel gp) {
@@ -108,10 +100,8 @@ public class UI {
         if (gp.gameState == gp.endState) {
             drawEndScreen();
             gp.stopMusic();
-            // gp.gameThread = null;
 
         } else if (!gameFinished){
-
             // Time
             playTime +=(double)1/60;
 
@@ -119,9 +109,7 @@ public class UI {
     }
 
     public void drawEndScreen() {
-
         gp.music.stop();
-        // Background color
         g2.setColor(new Color(245, 123, 36, 255));
         g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
 
@@ -176,8 +164,8 @@ public class UI {
         z = gp.screenHeight/2 + gp.tileSize*4;
         g2.drawString(text, i, z);
 
-        int finalScoreInt = (int)finalScore;
-        text = "Your final score is: " + finalScoreInt;
+        String finalScoreFormatted = String.format("%.2f", finalScore);
+        text = "Your final score is: " + finalScoreFormatted;
         textLength = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
         i = gp.screenWidth/2 - textLength/2;
         z = gp.screenHeight/2 + gp.tileSize*5;
@@ -245,13 +233,27 @@ public class UI {
             g2.drawImage(carrotImage, (int) (x - gp.tileSize*1.2), (int) (y - gp.tileSize*0.8), 64, 64, null);
         }
     }
+
+    public void updateFinalScore() {
+        gameFinished = true;
+        gp.gameState = gp.endState;
+
+        int baseTime = 60;
+        int basePumpkins = 10;
+        double kConst = 0.01;
+
+        finalScore = pumpkinsFinal * (baseTime/playTime) * (1 + (pumpkinsFinal - basePumpkins) * kConst) * log(playTime + 1); //
+    }
     public void drawPauseScreen() {
 
-        g2.setColor(new Color(245, 123, 36, 255));
-        String text = "Game Paused";
-        int x = getXForCenteredText(text); // Made a method for this since I will most likely be using it again in the future.
-        int y = gp.screenHeight/2;
+        g2.setColor(new Color(0, 0, 0, 150));
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
 
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 96F));
+        g2.setColor(Color.white);
+        String text = "PAUSED";
+        int x = getXForCenteredText(text);
+        int y = gp.screenHeight/2;
         g2.drawString(text, x, y);
     }
 
