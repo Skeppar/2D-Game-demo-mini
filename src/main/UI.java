@@ -1,6 +1,9 @@
 package main;
+import entity.Entity;
 import objects.OBJ_Carrot;
 import objects.OBJ_Pumpkin;
+import objects.SuperObject;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -17,7 +20,6 @@ public class UI {
     Graphics2D g2;
     Font arial_40, arial_80B, maruMonica, bellmore;
     BufferedImage pumpkinImage;
-
     BufferedImage carrotImage;
     public boolean messageOn = false;
     public String message = "";
@@ -80,17 +82,17 @@ public class UI {
 
         // Play state
         if(gp.gameState == gp.playState) {
-            // g2.setFont(new Font("Arial", Font.PLAIN, 40)); // This works but since it will render this 60 times per second this is more efficient.
+            // g2.setFont(new Font("Arial", Font.PLAIN, 40)); // This works but since it will render this 60 times per second next line is more efficient.
             g2.setFont(arial_40);
             g2.setColor(Color.white);
             g2.drawImage(pumpkinImage, gp.tileSize / 2, gp.tileSize / 2, gp.tileSize, gp.tileSize, null);
             g2.drawString("  x  " + gp.player.getHasPumpkin(), 95, 70);
+            playTime +=(double)1/60;
         }
         // Pause state
         if(gp.gameState == gp.pauseState) {
             drawPauseScreen();
             gp.stopMusic();
-            // Music doesn't play when playing again, fix this later.
         }
         // Dialogue state
         if (gp.gameState == gp.dialogueState) {
@@ -100,11 +102,6 @@ public class UI {
         if (gp.gameState == gp.endState) {
             drawEndScreen();
             gp.stopMusic();
-
-        } else if (!gameFinished){
-            // Time
-            playTime +=(double)1/60;
-
         }
     }
 
@@ -158,20 +155,21 @@ public class UI {
         int i;
         int z;
 
-        text = "Your managed to reach the finish line in : " + dFormat.format(playTime) + " seconds!";
+        g2.setColor(new Color (34, 121, 17, 255));
+        String finalScoreFormatted = String.format("%.2f", finalScore);
+        text = "Your final score is: " + finalScoreFormatted;
         textLength = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
         i = gp.screenWidth/2 - textLength/2;
         z = gp.screenHeight/2 + gp.tileSize*4;
         g2.drawString(text, i, z);
 
-        String finalScoreFormatted = String.format("%.2f", finalScore);
-        text = "Your final score is: " + finalScoreFormatted;
+        text = "Your managed to reach the finish line in : " + dFormat.format(playTime) + " seconds.";
         textLength = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
         i = gp.screenWidth/2 - textLength/2;
         z = gp.screenHeight/2 + gp.tileSize*5;
         g2.drawString(text, i, z);
 
-        text = "You managed to collect a total of " + pumpkinsFinal + " pumpkins, good job.";
+        text = "And collected a total of " + pumpkinsFinal + " pumpkins, good job!";
         textLength = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
         i = gp.screenWidth/2 - textLength/2;
         z = gp.screenHeight/2 + gp.tileSize*6;
@@ -232,6 +230,18 @@ public class UI {
         if(commandNum == 1) {
             g2.drawImage(carrotImage, (int) (x - gp.tileSize*1.2), (int) (y - gp.tileSize*0.8), 64, 64, null);
         }
+
+        g2.setColor(new Color (176, 0, 0, 255));
+        String text;
+        int textLength;
+        int i;
+        int z;
+        text = "Find as many tasty treats as you can and reach the finish line";
+        textLength = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
+        i = gp.screenWidth/2 - textLength/2;
+        z = gp.screenHeight/2 + gp.tileSize*6;
+        g2.drawString(text, i, z);
+
     }
 
     public void updateFinalScore() {
@@ -262,20 +272,46 @@ public class UI {
         // Dialogue window
         int x = gp.tileSize * 2;
         int y = gp.tileSize / 2;
-        int width = gp.screenWidth - (gp.tileSize * 4);
-        int height = gp.tileSize * 5;
+        int width = gp.screenWidth - (gp.tileSize * 3);
+        int height = gp.tileSize * 3;
+
+        if(gp.gameState == gp.dialogueState) {
+            drawPlayStateScreen();
+        }
 
         drawSubWindow(x, y, width, height);
-
-        // Give x & y new values and draw the text inside the window we made.
         g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 42F));
-        x += gp.tileSize;
-        y += gp.tileSize;
 
-        for (String line : currentDialogue.split("\n")) { // Can break the line on any symbol, but used \n since it's what you normally use.
-            g2.drawString(line, x, y);
-            y += 40;
+        String[] lines = currentDialogue.split("\n");
+
+        // Calculate y position to center text vertically
+        int textY = y + (height - (lines.length * 40)) / 2 + 40; // 40 is line height
+
+        for (String line : lines) {
+            // Calculate x position to center this line horizontally
+            int textX = x + (width - (int)g2.getFontMetrics().getStringBounds(line, g2).getWidth()) / 2;
+            g2.drawString(line, textX, textY);
+            textY += 40;
         }
+    }
+
+    private void drawPlayStateScreen() {
+
+        gp.tileM.draw(g2);
+
+        for (SuperObject superObject : gp.getObj()) {
+            if (superObject != null) {
+                superObject.draw(g2, gp);
+            }
+        }
+
+        for (Entity entity : gp.npc) {
+            if (entity != null) {
+                entity.draw(g2);
+            }
+        }
+
+        gp.getPlayer().draw(g2);
     }
 
     public void drawSubWindow(int x, int y, int width, int height) {

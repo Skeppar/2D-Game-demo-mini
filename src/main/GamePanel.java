@@ -134,7 +134,7 @@ public class GamePanel extends JPanel implements Runnable {
         // Title screen
         if (gameState == titleState) {
             ui.draw(g2);
-        }   else if (gameState == playState) {
+        }   else if (gameState == playState || gameState == dialogueState) {
             // Title
             tileM.draw(g2); // This has to be before player so that the player is on top of the tiles.
 

@@ -76,8 +76,15 @@ public class Player extends Entity{
             } else {
                 direction = "down";
             }
+        } else {
+            // No movement keys pressed, reset to still position
+            direction = "still";
+            spriteNum = 1;  // Reset to first frame
+            spriteCounter = 0;  // Reset counter
+        }
 
-            // Check tile collision.
+
+        // Check tile collision.
             collisionOn = false;
             gp.getcCheck().checkTile(this); // Pass player class as the entity.
 
@@ -133,7 +140,6 @@ public class Player extends Entity{
                 }
                 spriteCounter = 0;
             }
-        }
     }
 
     public void pickUpObject(int i) {
@@ -169,11 +175,16 @@ public class Player extends Entity{
                         gp.ui.showMessage("You need to collect at least one pumpkin!");
                     }
                 }
-                case "Boots" -> {
+                case "Carrot" -> {
                     gp.playSE(3);
-                    speed += 1;
+                    speed += 2;
                     gp.getObj()[i] = null;
-                    gp.ui.showMessage("Run like the wind!");
+                }
+
+                case "Apple" -> {
+                    gp.playSE(3);
+                    speed -= 1;
+                    gp.getObj()[i] = null;
                 }
             }
         }
@@ -183,12 +194,18 @@ public class Player extends Entity{
 
         if (i != 999) {
 
+            gp.gameState = gp.dialogueState;
+            gp.npc[i].speak();
+
+            /*
             if (gp.keyH.enterPressed) {
                 gp.gameState = gp.dialogueState;
                 gp.npc[i].speak();
             }
         }
         gp.keyH.enterPressed = false;
+             */
+        }
     }
 
     public void draw(Graphics2D g2) {

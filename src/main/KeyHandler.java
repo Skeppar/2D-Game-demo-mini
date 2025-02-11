@@ -73,9 +73,9 @@ public class KeyHandler implements KeyListener {
                 rightPressed = true;
             }
 
-            if (code == KeyEvent.VK_SHIFT) { // Not in use, use for sprint later.
+            if (code == KeyEvent.VK_SHIFT) { // Not in use, change to use for sprinting later.
                 shiftPressed = true;
-                // gp.player.speed = 6;
+                // gp.player.speed += 1;
             }
 
             if (code == KeyEvent.VK_ESCAPE) {
@@ -85,7 +85,6 @@ public class KeyHandler implements KeyListener {
             if (code == KeyEvent.VK_ENTER) {
                 enterPressed = true;
             }
-
 
             // Debug on and off
             if (code == KeyEvent.VK_T) {

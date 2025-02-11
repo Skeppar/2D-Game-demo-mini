@@ -11,7 +11,7 @@ public class NPC_OldMan extends Entity{
         super(gp);
 
         direction = "down";
-        speed = 2;
+        speed = 1;
 
         getImage();
         setDialogue();
@@ -32,17 +32,13 @@ public class NPC_OldMan extends Entity{
 
     public void setDialogue() {
 
-        dialogues[0] = "Hello adventurer";
-        dialogues[1] = "I heard you came to this \nisland in search of treasure.";
-        dialogues[2] = "I used to be a wizard you know, but then I got old. \nNow I just help guide others to treasures.";
-        dialogues[3] = "I wish you the best of luck.";
-
+        dialogues[0] = "Hello there friend!\nFind as many tasty treats as you can, but hurry\n time is not on your side.              Press 'Enter'";
+        dialogues[1] = "Oh, good you're back.\n I forgot to mention this, but look out\nfor any bad apples...";
+        dialogues[2] = "I wish you the best of luck.";
     }
-
     public void setAction() {
 
         actionLockCounter ++;
-
         // actionLockCounter == 120 means the direction of this NPC will be locked for 120 frames, or 2 seconds, before it can pick a new direction.
         if (actionLockCounter == 120) {
             Random random = new Random();

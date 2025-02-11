@@ -10,7 +10,7 @@ public class SuperObject {
     String name;
     boolean collision = false;
     int worldX, worldY;
-    Rectangle solidArea = new Rectangle(0, 0, 48, 48); // Player and object - 48*48 is the one full tile.
+    Rectangle solidArea = new Rectangle(0, 0, 48, 48); // Player and object - 48*48 is one full tile.
     int solidAreaDefaultX = 0;
     int solidAreaDefaultY = 0;
     UtilityTool uTool = new UtilityTool();

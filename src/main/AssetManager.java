@@ -1,9 +1,9 @@
 package main;
 
 import entity.NPC_OldMan;
-import objects.OBJ_BlueBoots;
+import objects.OBJ_Bad_Apple;
+import objects.OBJ_Carrot;
 import objects.OBJ_Chest;
-import objects.OBJ_Door;
 import objects.OBJ_Pumpkin;
 
 public class AssetManager {
@@ -32,17 +32,17 @@ public class AssetManager {
         gp.obj[1].setWorldX(gp.getTileSize() * 37);
         gp.obj[1].setWorldY(gp.getTileSize() * 15);
 
-        gp.obj[2] = new OBJ_Door(gp);
-        gp.obj[2].setWorldX(gp.getTileSize() * 37);
-        gp.obj[2].setWorldY(gp.getTileSize() * 13);
-
         gp.obj[3] = new OBJ_Chest(gp);
         gp.obj[3].setWorldX(gp.getTileSize() * 12);
         gp.obj[3].setWorldY(gp.getTileSize() * 10);
 
-        gp.obj[4] = new OBJ_BlueBoots(gp);
+        gp.obj[4] = new OBJ_Carrot(gp);
         gp.obj[4].setWorldX(gp.getTileSize() * 16);
         gp.obj[4].setWorldY(gp.getTileSize() * 28);
+
+        gp.obj[5] = new OBJ_Bad_Apple(gp);
+        gp.obj[5].setWorldX(gp.getTileSize() * 16);
+        gp.obj[5].setWorldY(gp.getTileSize() * 25);
 
     }
 
