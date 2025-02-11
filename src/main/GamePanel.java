@@ -153,8 +153,14 @@ public class GamePanel extends JPanel implements Runnable {
 
             player.draw(g2);
             ui.draw(g2);
+        } else if (gameState == pauseState) {
+            tileM.draw(g2);
+            player.draw(g2);
+            ui.draw(g2);
         } else if (gameState == endState) {
             tileM.draw(g2);
+            player.draw(g2);
+            ui.draw(g2);
         }
 
 
@@ -186,6 +192,23 @@ public class GamePanel extends JPanel implements Runnable {
         // Sound effect doesn't need to loop.
         se.setFile(i);
         se.play();
+    }
+
+
+    public void resetGame() {
+        stopMusic();
+        player.reset();
+        // Reset UI elements
+        ui.gameFinished = false;
+        ui.playTime = 0;
+        UI.pumpkinsFinal = 0;
+        UI.finalScore = 0;
+
+        gameState = playState;
+        // Reset all objects
+        aManager.setObject();
+        aManager.setNPC();
+        playMusic(0);
     }
 
     public int getTileSize() {

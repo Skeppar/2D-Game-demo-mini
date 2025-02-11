@@ -161,8 +161,7 @@ public class Player extends Entity{
                 }
                 case "Chest" -> {
                     if(hasPumpkin > 0) {
-                        gp.ui.gameFinished = true;
-                        gp.stopMusic();
+                        gp.ui.updateFinalScore();
                         gp.playSE(2);
                         System.out.println("You have " + hasPumpkin + " pumpkins.");
                     }

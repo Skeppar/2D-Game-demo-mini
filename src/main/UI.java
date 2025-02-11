@@ -39,6 +39,9 @@ public class UI {
     }
 
     public void updateFinalScore() {
+        gameFinished = true;
+        gp.gameState = gp.endState;
+        gp.stopMusic();
         finalScore = (playTime * pumpkinsFinal) * pumpkinMultiplier * timeMultiplier;
     }
 
@@ -102,14 +105,12 @@ public class UI {
             drawDialogueScreen();
         }
 
-        if (gameFinished) {
-
-            gp.gameState = gp.endState;
+        if (gp.gameState == gp.endState) {
             drawEndScreen();
             gp.stopMusic();
-            gp.gameThread = null;
+            // gp.gameThread = null;
 
-        } else {
+        } else if (!gameFinished){
 
             // Time
             playTime +=(double)1/60;
@@ -119,6 +120,7 @@ public class UI {
 
     public void drawEndScreen() {
 
+        gp.music.stop();
         // Background color
         g2.setColor(new Color(245, 123, 36, 255));
         g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);

@@ -113,11 +113,7 @@ public class KeyHandler implements KeyListener {
     }
 
     private void resetGameVariables() {
-        gp.ui.gameFinished = false;
-        UI.pumpkinsFinal = 0;
-        UI.finalScore = 0;
-        gp.ui.playTime = 0;
-        gp.player.reset();
+        gp.resetGame();
     }
 
     @Override
