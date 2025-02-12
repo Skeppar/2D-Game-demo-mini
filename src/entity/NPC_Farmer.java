@@ -4,9 +4,9 @@ import main.GamePanel;
 
 import java.util.Random;
 
-public class NPC_OldMan extends Entity{
+public class NPC_Farmer extends Entity{
 
-    public NPC_OldMan(GamePanel gp) {
+    public NPC_Farmer(GamePanel gp) {
 
         super(gp);
 
@@ -20,14 +20,14 @@ public class NPC_OldMan extends Entity{
 
     public void getImage() {
 
-        up1 = setUp("NPC/oldman_up_1");
-        up2 = setUp("NPC/oldman_up_2");
-        down1 = setUp("NPC/oldman_down_1");
-        down2 = setUp("NPC/oldman_down_2");
-        right1 = setUp("NPC/oldman_right_1");
-        right2 = setUp("NPC/oldman_right_2");
-        left1 = setUp("NPC/oldman_left_1");
-        left2 = setUp("NPC/oldman_left_2");
+        up1 = setUp("NPC/farmer_up_1");
+        up2 = setUp("NPC/farmer_up_2");
+        down1 = setUp("NPC/farmer_down_1");
+        down2 = setUp("NPC/farmer_down_2");
+        right1 = setUp("NPC/farmer_right_1");
+        right2 = setUp("NPC/farmer_right_2");
+        left1 = setUp("NPC/farmer_left_1");
+        left2 = setUp("NPC/farmer_left_2");
     }
 
     public void setDialogue() {

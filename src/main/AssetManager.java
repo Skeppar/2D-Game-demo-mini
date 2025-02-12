@@ -1,6 +1,6 @@
 package main;
 
-import entity.NPC_OldMan;
+import entity.NPC_Farmer;
 import objects.*;
 
 public class AssetManager {
@@ -76,7 +76,7 @@ public class AssetManager {
 
     public void setNPC() {
 
-        gp.npc[0] = new NPC_OldMan(gp);
+        gp.npc[0] = new NPC_Farmer(gp);
         gp.npc[0].worldX = gp.getTileSize()*12;
         gp.npc[0].worldY = gp.getTileSize()*12;
     }

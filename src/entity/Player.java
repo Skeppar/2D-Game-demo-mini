@@ -44,10 +44,9 @@ public class Player extends Entity{
         up1 = setUp("player/2D_Character_Away_Moving_1");
         up2 = setUp("player/2D_Character_Away_Moving_2");
         still1 = setUp("player/2D_Character_Front_Still");
-        still2 = setUp("player/2D_Character_Front_Still2"); // Not in use, add idle animation later.
+        // still2 = setUp("player/2D_Character_Front_Still2"); // Not in use, add idle animation later.
         down1 = setUp("player/2D_Character_Front_Moving_1");
         down2 = setUp("player/2D_Character_Front_Moving_2");
-        dStill = setUp("player/2D_Character_Front_Still");
         right1 = setUp("player/2D_Character_Right_Moving_1");
         right2 = setUp("player/2D_Character_Right_Moving_2");
         left1 = setUp("player/2D_Character_Left_Moving_1");
