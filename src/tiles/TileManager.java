@@ -28,56 +28,7 @@ public class TileManager {
 
     public void getTitleImage() {
 
-        /*
-        // This is all works for drawing the images but makes drawing a bit slower.
-        try {
-
-            tile[0] = new Tile();
-            tile[0].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("tile/Grass_1.png")));
-
-            tile[1] = new Tile();
-            tile[1].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("tile/Wall_1.png")));
-            tile[1].collision = true;
-
-            tile[2] = new Tile();
-            tile[2].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("tile/Water_1.png")));
-            //tile[2].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tile/Water_1.png")); // Don't have to use requireNonNull but IntelliJ recommends the above way.
-            tile[2].collision = true;
-
-            tile[3] = new Tile();
-            tile[3].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("tile/Road_0.png")));
-
-            tile[4] = new Tile();
-            tile[4].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("tile/Dirt_1.png")));
-
-            tile[5] = new Tile();
-            tile[5].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("tile/Tree_1.png")));
-            tile[5].collision = true;
-
-            tile[6] = new Tile();
-            tile[6].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("tile/Sakura_tree_test.png")));
-            tile[6].collision = true;
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-         */
-
-
-        // Placeholder, start at 10 so the map doesn't look weird in the text file.
-        setUp(0, "Grass_0", false);
-        setUp(1, "Grass_1", false);
-        setUp(2, "Grass_1", false);
-        setUp(3, "Grass_1", false);
-        setUp(4, "Grass_1", false);
-        setUp(5, "Grass_1", false);
-        setUp(6, "Grass_1", false);
-        setUp(7, "Grass_1", false);
-        setUp(8, "Grass_1", false);
-        setUp(9, "Grass_1", false);
-
-        // Actual tiles
+        // Start at 10 to make the text file neat
         setUp(10, "Grass_0", false);
         setUp(11, "Grass_1", false);
         setUp(12, "Road_0", false);

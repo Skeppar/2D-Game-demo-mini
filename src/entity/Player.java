@@ -165,7 +165,7 @@ public class Player extends Entity{
                         gp.ui.showMessage("You need a key =(");
                     }
                 }
-                case "Chest" -> {
+                case "Goal" -> {
                     if(hasPumpkin > 0) {
                         gp.ui.updateFinalScore();
                         gp.playSE(2);
@@ -183,7 +183,7 @@ public class Player extends Entity{
 
                 case "Apple" -> {
                     gp.playSE(3);
-                    speed -= 1;
+                    speed -= 2;
                     gp.getObj()[i] = null;
                 }
             }

@@ -35,7 +35,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     // Entity and Object
     Player player = new Player(this, keyH);
-    SuperObject[] obj = new SuperObject[10];
+    SuperObject[] obj = new SuperObject[99];
     public Entity[] npc = new Entity[10];
 
     // Game State
@@ -94,7 +94,7 @@ public class GamePanel extends JPanel implements Runnable {
             }
 
             if (timer >= 1000000000) { // Divide with 1b so that we only print this once every second and not every nanosecond.
-                System.out.println("FPS: " + drawCount);
+                // System.out.println("FPS: " + drawCount);
                 drawCount = 0; // Reset so that it doesn't increase but always shows the frame for the last second.
                 timer = 0;
             }
