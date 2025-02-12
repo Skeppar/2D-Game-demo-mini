@@ -37,7 +37,7 @@ public class UI {
     // Display message for items.
     private String tempMessage = "";
     private int tempMessageCounter = 0;
-    private final int tempMessageDuration = 120; // 2 seconds at 60 FPS
+    private final int tempMessageDuration = 120; // Visible for 120 frames
 
     // Final score
     public void updatePumpkins(int pumpkins) {
@@ -114,9 +114,9 @@ public class UI {
             g2.setColor(Color.white);
             String text = tempMessage;
             int x = getXForCenteredText(text);
-            int y = gp.screenHeight/2; // You can adjust this position
+            int y = gp.screenHeight/2;
 
-            // Optional: draw shadow/outline for better visibility
+            // Shadow for better visibility
             g2.setColor(Color.black);
             g2.drawString(text, x+2, y+2);
             g2.setColor(Color.white);
