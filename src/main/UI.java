@@ -262,6 +262,11 @@ public class UI {
         i = gp.screenWidth/2 - textLength/2;
         z = gp.screenHeight/2 + gp.tileSize*6;
         g2.drawString(text, i, z);
+        text = "Use W-A-S-D to move, and 'Enter' to select an option";
+        textLength = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
+        i = gp.screenWidth/2 - textLength/2;
+        z = gp.screenHeight/2 + gp.tileSize*7;
+        g2.drawString(text, i, z);
 
     }
 
