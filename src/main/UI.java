@@ -34,6 +34,11 @@ public class UI {
     public static double finalScore = 0;
     DecimalFormat dFormat = new DecimalFormat("#0.00");
 
+    // Display message for items.
+    private String tempMessage = "";
+    private int tempMessageCounter = 0;
+    private final int tempMessageDuration = 120; // 2 seconds at 60 FPS
+
     // Final score
     public void updatePumpkins(int pumpkins) {
         pumpkinsFinal = pumpkins; // Store the current key count in a global variable
@@ -64,8 +69,8 @@ public class UI {
 
     public void showMessage(String text) {
 
-        message = text;
-        messageOn = true;
+        tempMessage = text;
+        tempMessageCounter = tempMessageDuration;
     }
 
     public void draw(Graphics2D g2) {
@@ -102,6 +107,22 @@ public class UI {
         if (gp.gameState == gp.endState) {
             drawEndScreen();
             gp.stopMusic();
+        }
+        // Message for items
+        if (tempMessageCounter > 0) {
+            g2.setFont(maruMonica.deriveFont(Font.BOLD, 40F));
+            g2.setColor(Color.white);
+            String text = tempMessage;
+            int x = getXForCenteredText(text);
+            int y = gp.screenHeight/2; // You can adjust this position
+
+            // Optional: draw shadow/outline for better visibility
+            g2.setColor(Color.black);
+            g2.drawString(text, x+2, y+2);
+            g2.setColor(Color.white);
+            g2.drawString(text, x, y);
+
+            tempMessageCounter--;
         }
     }
 

@@ -153,38 +153,31 @@ public class Player extends Entity{
                     hasPumpkin++;
                     gp.ui.updatePumpkins(hasPumpkin);
                     gp.getObj()[i] = null;
-                }
-                case "Door" -> {
-                    if(hasPumpkin > 0) {
-                        gp.playSE(4); // Sound effect 4
-                        gp.getObj()[i] = null;
-                        System.out.println("Pumpkin: " + hasPumpkin);
-                        gp.ui.showMessage("You reached the goal.");
-                    }
-                    else {
-                        gp.ui.showMessage("You need a key =(");
+                    if (hasPumpkin == 1) {
+                        gp.ui.showMessage("Gotta Eat 'Em All...");
                     }
                 }
                 case "Goal" -> {
                     if(hasPumpkin > 0) {
                         gp.ui.updateFinalScore();
                         gp.playSE(2);
-                        System.out.println("You have " + hasPumpkin + " pumpkins.");
                     }
                     else {
-                        gp.ui.showMessage("You need to collect at least one pumpkin!");
+                        gp.ui.showMessage("You need to collect at least one pumpkin to finish the game");
                     }
                 }
                 case "Carrot" -> {
                     gp.playSE(3);
                     speed += 2;
                     gp.getObj()[i] = null;
+                    gp.ui.showMessage("This is so much better than the stick!");
                 }
 
                 case "Apple" -> {
                     gp.playSE(3);
                     speed -= 2;
                     gp.getObj()[i] = null;
+                    gp.ui.showMessage("HUUUURGGEHH! I think I'm going to be sick");
                 }
             }
         }

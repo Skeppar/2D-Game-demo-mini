@@ -42,8 +42,8 @@ public class AssetManager {
         gp.obj[6].setWorldY(gp.getTileSize() * 42);
 
         gp.obj[7] = new OBJ_Pumpkin(gp);
-        gp.obj[7].setWorldX(gp.getTileSize() * 17);
-        gp.obj[7].setWorldY(gp.getTileSize() * 10);
+        gp.obj[7].setWorldX(gp.getTileSize() * 7);
+        gp.obj[7].setWorldY(gp.getTileSize() * 33);
 
         gp.obj[8] = new OBJ_Pumpkin(gp);
         gp.obj[8].setWorldX(gp.getTileSize() * 37);
